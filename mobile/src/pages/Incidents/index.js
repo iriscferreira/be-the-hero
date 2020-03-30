@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Feather} from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { View, FlatList, Image, Text, TouchableOpacity } from 'react-native';
 
+import api from '../../services/api';
 import logoImg from '../../assets/logo.png';
 
 import styles from './styles';
+import api from '../../services/api';
 
 export default function Incidents(){
+    const[ incidents, setIncidents ] = useState([]);
+    const navigation = useNavigation();
+
+    function navigateToDetail(){
+        navigation.navigate('Detail');
+    }
+
+    async function loadIncidents(){
+        const response = await api.get('incidents', );
+
+        setIncidents(response.data);
+    }
+
+    useEffect( () => {
+        loadIncidents();
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -21,7 +41,9 @@ export default function Incidents(){
 
             <FlatList 
                 data= {[1,2,3,4]}
-                style={styles.incidentList}                
+                style={styles.incidentList}   
+                keyExtractor={incident => String(incident)}  
+                showsVerticalScrollIndicator={false}          
                 renderItem= { () => (
                     <View style={styles.incident}>
                     <Text style={styles.incidentProperty}>ONG:</Text>
@@ -35,11 +57,10 @@ export default function Incidents(){
     
                     <TouchableOpacity 
                     style= {styles.detailsButton} 
-                    onPress={ () => {}}
-                    >
-    
+                    onPress={ navigateToDetail}
+                    >    
                         <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>    
-                        <Feather name="arrow-right" size={16} color="#e020r1" />
+                        <Feather name="arrow-right" size={16} color="#E82041" />
                     </TouchableOpacity>
                 </View>
                 )}
